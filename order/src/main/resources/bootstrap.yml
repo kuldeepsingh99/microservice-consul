@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    consul:
+      host: consul
+      port: 8500
+      discovery:
+        healthCheckInterval: 5s
+        preferIpAddress: true
+  application:
+     name: order-service

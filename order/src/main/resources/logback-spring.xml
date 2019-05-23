@@ -1,0 +1,20 @@
+<!-- <configuration>
+    <appender name="jsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="jsonConsoleAppender"/>
+    </root>
+</configuration> -->
+
+<configuration>
+  <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+    <destination>192.168.99.100:5045</destination>
+    <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder" />
+  </appender>
+  <include resource="org/springframework/boot/logging/logback/base.xml"/>
+  <root level="INFO">
+    <!--<appender-ref ref="LOGSTASH" />-->
+    <appender-ref ref="CONSOLE" />
+  </root>
+</configuration>

@@ -1,0 +1,84 @@
+version: '3'
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+      - MONGO_INITDB_DATABASE=test
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 27017:27017
+    networks:
+      - mynetwork
+    command: mongod --smallfiles --logpath=/dev/null # --quiet
+
+  consul:
+    image: consul:latest
+    networks:
+      - mynetwork
+    ports:
+      - 8500:8500
+    command: agent -server -bootstrap-expect 1 -ui -data-dir /tmp -client=0.0.0.0
+      
+  gateway:
+    restart: always
+    build: 
+      context: ../gateway
+      dockerfile: Dockerfile
+    networks:
+      - mynetwork
+    volumes:
+      - /tmp:/logs
+    expose:
+      - "8600"
+    depends_on:
+      - mongo
+      - consul   
+      
+  student:
+    restart: always
+    build: 
+      context: ../student
+      dockerfile: Dockerfile
+    networks:
+      - mynetwork
+    volumes:
+      - /tmp:/logs
+    ports:
+      - 9095:9095
+    depends_on:
+      - mongo
+      - consul
+  
+  order:
+    restart: always
+    build: 
+      context: ../order
+      dockerfile: Dockerfile
+    networks:
+      - mynetwork
+    volumes:
+      - /tmp:/logs
+    ports:
+      - 8085:8085
+    depends_on:
+      - mongo
+      - consul
+          
+  nginx:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      - gateway
+    networks:
+      - mynetwork
+    command: [nginx-debug, '-g', 'daemon off;']
+    
+networks:
+  mynetwork:

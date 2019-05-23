@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    consul:
+      host: consul
+      port: 8500
+      discovery:
+        healthCheckInterval: 5s
+        preferIpAddress: true
+        
+management:
+   security:
+      enabled: false
+   endpoints:
+      web:
+         exposure:
+            include: "*"

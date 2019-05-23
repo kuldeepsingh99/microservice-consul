@@ -1,0 +1,17 @@
+spring:
+  application:
+     name: student-service
+     
+server:
+   port: 9095
+
+management:
+   security:
+      enabled: false
+   endpoints:
+      web:
+         exposure:
+            include: "*"
+            
+logging:
+   file: /logs/student-json.log  

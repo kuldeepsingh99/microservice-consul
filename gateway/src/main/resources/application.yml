@@ -1,0 +1,32 @@
+spring:
+  application:
+     name: gateway
+  data:
+      mongodb.host: mongo
+      mongodb.port: 27017
+      mongodb.uri: mongodb://mongo/test
+      mongo.repositories.enabled: true
+
+server:
+   port: 8600
+   
+zuul:
+  ignoredServices: '*'
+  prefix: /api
+  routes:
+    student:
+      path: /students/**
+      serviceId: student-service
+      
+         
+logging:
+  level:
+    ROOT: INFO
+  file: /logs/gateway-json.log
+    
+    
+           
+jwt:
+  security:
+    key: j3H5Ld5nYmGWyULy6xwpOgfSH++NgKXnJMq20vpfd+8=t
+    
