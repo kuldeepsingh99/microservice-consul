@@ -19,6 +19,8 @@ Spring framework provides set of libraries for creating micro services in Java.
  
  - **order** - its a microservices
  
+ - **micro** - its a maven module
+ 
  - **mongo** - mondodb is used for storing user credentials
  
  - **consul** - consul is used for service discovery and registration
@@ -32,5 +34,6 @@ Spring framework provides set of libraries for creating micro services in Java.
  - **logstash** - it collect the logs from filebeat
  
  - **filebeat** - it ships the logs to logstash for processing
+ 
  
  
