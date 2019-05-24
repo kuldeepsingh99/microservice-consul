@@ -1,4 +1,4 @@
-# Creating microservice using Spring Boot, Consul as Service Registry, Zuul as API GateWay, Zipkin as distributed logging, Filebeat as log shippers, Logstash as Data Aggregation and processing and ELK Stack for Log Analysis and visulaziation
+# Creating microservice using Spring Boot, Consul, Zuul with Spring Security and ELK Stack
 
 Spring framework provides set of libraries for creating micro services in Java.
 
