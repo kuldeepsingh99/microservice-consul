@@ -35,5 +35,9 @@ Spring framework provides set of libraries for creating micro services in Java.
  
  - **filebeat** - it ships the logs to logstash for processing
  
+# Running this example
+
+## Docker container for File Beat & ELK Stack
  
- 
+Run the following to start the container's
+
