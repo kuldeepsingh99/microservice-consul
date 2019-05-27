@@ -44,13 +44,13 @@ Spring framework provides set of libraries for creating micro services in Java.
 
 #### Pull Images from docker hub registry
 
-docker pull docker.elastic.co/elasticsearch/elasticsearch:6.5.1
+```docker pull docker.elastic.co/elasticsearch/elasticsearch:6.5.1```
 
-docker pull docker.elastic.co/kibana/kibana:6.5.2
+```docker pull docker.elastic.co/kibana/kibana:6.5.2```
 
-docker pull docker.elastic.co/logstash/logstash:6.5.2
+```docker pull docker.elastic.co/logstash/logstash:6.5.2```
 
-docker pull docker.elastic.co/beats/filebeat:6.5.4
+```docker pull docker.elastic.co/beats/filebeat:6.5.4```
 
 #### Start the containers
 
@@ -63,7 +63,7 @@ docker pull docker.elastic.co/beats/filebeat:6.5.4
 - ```docker run -d -it --net=mynetwork --name logm -p 5044:5044 -vvv -e xpack.monitoring.enabled=true -e xpack.monitoring.elasticsearch.hosts=192.168.99.100:9200 docker.elastic.co/logstash/logstash:6.5.2```
 
   - important thing to note here is that xpack monitoring should be enabled and xpack host should be elastic server
-  - we also need to make sure that logstash.conf should be present in the (/usr/share/logstash/pipeline) location with following content
+  - we also need to make sure that **logstash.conf** should be present in **(/usr/share/logstash/pipeline)** location with following content
     ```
     input {
        beats {
@@ -79,7 +79,12 @@ docker pull docker.elastic.co/beats/filebeat:6.5.4
       }
     }
     ```
-  logstash is accepting beat input in 5044 and it send the events to elastic search
+  - **logstash.yml (/usr/share/logstash/config)**
+    ```    
+    xpack.monitoring.elasticsearch.url: http://192.168.99.100:9200
+    xpack.monitoring.enabled: true
+    ```
+    logstash is accepting beat input in 5044 and it send the events to elastic search
   
 - ```docker run -d -it --net=mynetwork --name filebeatms -p 12201:12201 -v /tmp:/usr/share/filebeat/logs/ docker.elastic.co/beats/filebeat:6.5.4```
 
@@ -109,4 +114,77 @@ once all the four container's are started we would be able to see the container 
 ## Project Architecture
 
 ![alt text](https://github.com/kuldeepsingh99/microservice-consul/blob/master/images/msarc.png "Microservice")
+
+**Netflix Zuul**, Student and order container are registered in **consul** for service discovery. Here **NGINX** we are using as a reverse proxy.
+
+Some features of API Gateway
+- **microservice authentication and security** in the gateway layer to protect the actual services
+- **Dynamic Routing** can route requests to different backend clusters as needed, Internally, Zuul uses Netflix Ribbon to look up for all instances of the service from the service discovery (Consul)
+
+Student microservice is also has the capabality of load balancing to order service
+
+    ```
+    @Bean
+    @LoadBalanced
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+    ```
+[Hystrix](https://github.com/Netflix/Hystrix) Circuit breaker patterns is also implement, It is generally required to enable fault tolerance in the application where some underlying service is down/throwing error permanently, we need to fall back to different path of program execution automatically. This is related to distributed computing style of Eco system using lots of underlying Microservices
+
+   ```
+   @HystrixCommand(fallbackMethod = "callStudentServiceAndGetData_Fallback")
+    public Order callOrderService()
+    {
+		      LOG.info("Calling order service.");
+        Order response = restTemplate.getForObject("http://order-service/getorder", Order.class);
+        return response;
+    }
+  ```
+
+![alt text](https://github.com/kuldeepsingh99/microservice-consul/blob/master/images/consul.JPG "Consul")
+
+
+### Starting the microservice containers
+
+Open Docker terminal and go inside micro project (its a maven module, which will compile order projecs)
+
+- run this command to create jar
+   ```mvn clean package```
+   
+- run this command to build container
+   ```docker-compose build```
+   
+- start the container
+  ```docker-compose up -d```
+
+- check all the container has started 
+  ```docker ps```
+
+- run this command to scale container
+  ```docker-compose scale gateway=2```
+
+  *Here gateway is the name of the service*
+  
+![alt text](https://github.com/kuldeepsingh99/microservice-consul/blob/master/images/container.JPG "All Container") 
+
+
+### Register/Login and Access Service
+
+##### Register user
+![alt text](https://github.com/kuldeepsingh99/microservice-consul/blob/master/images/register.jpg "Register User") 
+
+##### Login User
+![alt text](https://github.com/kuldeepsingh99/microservice-consul/blob/master/images/login.JPG "Login User") 
+
+##### Access service
+![alt text](https://github.com/kuldeepsingh99/microservice-consul/blob/master/images/api.JPG "Access Service") 
+
+##### View Logs (Kibana)
+![alt text](https://github.com/kuldeepsingh99/microservice-consul/blob/master/images/kibana.JPG "Kibana") 
+
+
+
+
+
     
