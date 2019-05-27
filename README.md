@@ -1,4 +1,4 @@
-# Creating microservice using Spring Boot, Consul, Zuul with Spring Security and ELK Stack
+# Creating microservice using Spring Boot, Consul, Zuul with Spring Security and ELK Stack in Docker Containers
 
 Spring framework provides set of libraries for creating micro services in Java.
 
@@ -40,6 +40,12 @@ Spring framework provides set of libraries for creating micro services in Java.
 ## Docker container for File Beat & ELK Stack
 
 ### ELK Architecture
+
+1. [Elastic Search](https://www.elastic.co/) is a distributed, JSON-based search and analytics engine designed for horizontal scalability, maximum reliability, and easy management.
+2. [Logstash](https://www.elastic.co/products/logstash) is a dynamic data collection pipeline with an extensible plugin ecosystem and strong Elasticsearch synergy.
+3. [Kibana](https://www.elastic.co/products/kibana) gives the visualization of data through a UI.
+4. [Beat](https://www.elastic.co/products/beats) is used to ship logs from microservice to logstash
+
 ![alt text](https://github.com/kuldeepsingh99/microservice-consul/blob/master/images/elk.png "ELK")
 
 #### Pull Images from docker hub registry
