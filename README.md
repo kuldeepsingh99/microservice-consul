@@ -107,4 +107,6 @@ once all the four container's are started we would be able to see the container 
 ![alt text](https://github.com/kuldeepsingh99/microservice-consul/blob/master/images/containerelk.png "Container")
 
 ## Project Architecture
+
+![alt text](https://github.com/kuldeepsingh99/microservice-consul/blob/master/images/msarc.png "Microservice")
     
