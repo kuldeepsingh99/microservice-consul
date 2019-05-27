@@ -101,3 +101,10 @@ docker pull docker.elastic.co/beats/filebeat:6.5.4
          hosts: ["192.168.99.100:5044"]
     ```
     here we can see that filebeat is reading from the shared location and its sending the log event to logstash for processing
+
+once all the four container's are started we would be able to see the container list
+    
+![alt text](https://github.com/kuldeepsingh99/microservice-consul/blob/master/images/containerelk.png "Container")
+
+## Project Architecture
+    
